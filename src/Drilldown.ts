@@ -140,13 +140,10 @@ export default class Drilldown {
   }
 
   /**
-   * Remove all active classes from all subs
+   * Initialize the drilldown
+   * @param {boolean} initializeEventListeners
    * @private
    */
-  private hideAllSubs () {
-    Array.from(this.root.querySelectorAll(`.${this.options.subClass}`)).forEach((sub: HTMLElement) => sub.classList.remove(this.options.subActiveClass))
-  }
-
   private initiate (initializeEventListeners: boolean = true) {
     // get all parent elements and activate the event listener
     const parents: Array<HTMLElement> = Array.from(this.root.querySelectorAll(`.${this.options.parentClass}`))
@@ -188,6 +185,14 @@ export default class Drilldown {
   }
 
   /**
+   * Remove all active classes from all subs
+   * @private
+   */
+  private hideAllSubs () {
+    Array.from(this.root.querySelectorAll(`.${this.options.subClass}`)).forEach((sub: HTMLElement) => sub.classList.remove(this.options.subActiveClass))
+  }
+
+  /**
    * Get the parent sub from the given one
    *
    * @param {HTMLElement} sub
@@ -195,18 +200,11 @@ export default class Drilldown {
    * @private
    */
   private getParentSub (sub: HTMLElement) {
-    let current: HTMLElement = sub
-    let parentSub: HTMLElement = undefined
+    const parentSub: HTMLElement = sub.closest(this.options.subClass)
 
-    while (parentSub === undefined) {
-      current = current.parentElement
-
-      if (!current || current === this.root || current.tagName === 'BODY') {
-        // if the current is either null, the root or the body return null
-        parentSub = null
-      } else if (current.classList.contains(this.options.subClass)) {
-        parentSub = current
-      }
+    // if the parent sub is the root, th
+    if (parentSub && parentSub === this.root) {
+      return null
     }
 
     return parentSub
