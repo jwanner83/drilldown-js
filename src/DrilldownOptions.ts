@@ -6,6 +6,12 @@ export default class DrilldownOptions {
   public speed: number = 100
 
   /**
+   * If the script should be disabled
+   * @type {boolean}
+   */
+  public deactivated: boolean = false
+
+  /**
    * The class of the parent element
    * @type {string}
    */

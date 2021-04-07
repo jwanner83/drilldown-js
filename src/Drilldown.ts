@@ -23,41 +23,13 @@ export default class Drilldown {
    * @param {HTMLElement} root
    * @param options
    */
-  constructor (root: HTMLElement, options: any = null): Drilldown {
+  constructor (root: HTMLElement, options: any = null) {
     this.root = root
     this.options = DrilldownOptions.getOptions(options)
 
     this.setLevel(Array.from(this.root.querySelectorAll(`.${this.options.subClass}:not(.${this.options.subClass} .${this.options.subClass})`)))
 
-    // get all parent elements and activate the event listener
-    const parents: Array<HTMLElement> = Array.from(this.root.querySelectorAll(`.${this.options.parentClass}`))
-    parents.forEach(parent => {
-      const sub: HTMLElement = parent.nextElementSibling as HTMLElement
-
-      if (!sub || !sub.classList.contains(this.options.subClass)) {
-        return
-      }
-
-      parent.addEventListener('click', (): void => {
-        this.down(sub)
-      })
-
-      // if the sub navigation of the parent contains a `data-drilldown-active` attribute, use it as starting point
-      if ((parent.nextElementSibling as HTMLElement).dataset.drilldownActive !== undefined) {
-        this.down(sub)
-      }
-    })
-
-    // get all back elements and activate the event listener
-    const backs: Array<HTMLElement> = Array.from(this.root.querySelectorAll(`.${this.options.backClass}`))
-    backs.forEach((back: HTMLElement): void => {
-      back.addEventListener('click', (): void => {
-        this.up(back.parentElement)
-      })
-    })
-
-    // set the transition after the starting point has been set to avoid ugly visual bugs
-    this.root.style.transition = this.options.speed + 'ms margin-left'
+    this.initiate()
   }
 
   /**
@@ -113,6 +85,106 @@ export default class Drilldown {
     if (sub) {
       this.root.style.height = sub.offsetHeight + 'px'
     }
+  }
+
+  /**
+   * Activate the script after it has been deactivated
+   */
+  public activate (): void {
+    this.options.deactivated = false
+  }
+
+  /**
+   * Deactivate the script after it has been activated
+   */
+  public deactivate (): void {
+    this.options.deactivated = true
+  }
+
+  /**
+   * Destroy the drilldown.
+   * Calling the reset method after destroying it will re-initiate the script
+   */
+  public destroy (): void {
+    this.deactivate()
+
+    this.root.style.transition = ''
+
+    requestAnimationFrame((): void => {
+      this.root.style.marginLeft = ''
+      this.root.style.height = ''
+
+      this.hideAllSubs()
+    })
+  }
+
+  /**
+   * Reset the drilldown to its initial position
+   * @param {boolean} activate
+   */
+  public reset (activate: boolean = true): void {
+    this.root.style.transition = ''
+
+    requestAnimationFrame((): void => {
+      this.root.style.marginLeft = ''
+      this.root.style.height = ''
+
+      this.hideAllSubs()
+
+      requestAnimationFrame((): void => {
+        this.initiate(false)
+
+        activate && this.activate()
+      })
+    })
+  }
+
+  /**
+   * Remove all active classes from all subs
+   * @private
+   */
+  private hideAllSubs () {
+    Array.from(this.root.querySelectorAll(`.${this.options.subClass}`)).forEach((sub: HTMLElement) => sub.classList.remove(this.options.subActiveClass))
+  }
+
+  private initiate (initializeEventListeners: boolean = true) {
+    // get all parent elements and activate the event listener
+    const parents: Array<HTMLElement> = Array.from(this.root.querySelectorAll(`.${this.options.parentClass}`))
+    parents.forEach(parent => {
+      const sub: HTMLElement = parent.nextElementSibling as HTMLElement
+
+      if (!sub || !sub.classList.contains(this.options.subClass)) {
+        return
+      }
+
+      if (initializeEventListeners) {
+        parent.addEventListener('click', (): void => {
+          if (!this.options.deactivated) {
+            this.down(sub)
+          }
+        })
+      }
+
+      // if the sub navigation of the parent contains a `data-drilldown-active` attribute, use it as starting point
+      if ((parent.nextElementSibling as HTMLElement).dataset.drilldownActive !== undefined) {
+        this.down(sub)
+      }
+    })
+
+    if (initializeEventListeners) {
+      // get all back elements and activate the event listener
+      const backs: Array<HTMLElement> = Array.from(this.root.querySelectorAll(`.${this.options.backClass}`))
+      backs.forEach((back: HTMLElement): void => {
+        back.addEventListener('click', (): void => {
+          if (!this.options.deactivated) {
+            this.up(back.parentElement)
+          }
+        })
+      })
+    }
+
+    // set the transition after the starting point has been set to avoid ugly visual bugs
+    this.root.style.transition = this.options.speed + 'ms margin-left'
   }
 
   /**
