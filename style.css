@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    background: black;
+    color: white;
+}
+
+.wrapper {
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    padding: 100px 20px;
+}
+
+.drilldown__container {
+    overflow: hidden;
+    width: 300px;
+}
+
+.drilldown {
+    position: relative;
+    width: 100%;
+    font-family: 'Century Gothic', sans-serif;
+}
+
+.drilldown__sub {
+    display: none;
+}
+
+.drilldown__sub--active {
+    display: block;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    margin-left: 100%;
+}
+
+.drilldown__back {
+    font-size: 24px;
+    margin-bottom: 36px;
+}
+
+.drilldown__item {
+    font-size: 30px;
+    margin-bottom: 20px;
+    display: block;
+}

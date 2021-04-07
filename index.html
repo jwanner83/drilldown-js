@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drilldown</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="drilldown__container">
+        <div class="drilldown">
+            <div class="drilldown__item">
+                <a href="#">Parent 1</a>
+            </div>
+            <div class="drilldown__item">
+                <div class="drilldown__parent">
+                    Parent 2
+                </div>
+                <div class="drilldown__sub">
+                    <p class="drilldown__back">
+                        Back
+                    </p>
+                    <div class="drilldown__item">
+                        <a href="#">Child 1</a>
+                    </div>
+                    <div class="drilldown__item">
+                        <a href="#">Child 2</a>
+                    </div>
+                    <div class="drilldown__item">
+                        <div class="drilldown__parent">
+                            Child 3
+                        </div>
+                        <div class="drilldown__sub">
+                            <p class="drilldown__back">
+                                Back
+                            </p>
+                            <div class="drilldown__item">
+                                <a href="#">Child 3 1</a>
+                            </div>
+                            <div class="drilldown__item">
+                                <a href="#">Child 3 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="drilldown__item">
+                <a href="#">Parent 3</a>
+            </div>
+            <div class="drilldown__item">
+                <div class="drilldown__parent">
+                    Parent 4
+                </div>
+                <div class="drilldown__sub">
+                    <p class="drilldown__back">
+                        Back
+                    </p>
+                    <div class="drilldown__item">
+                        <a href="#">Child 1</a>
+                    </div>
+                    <div class="drilldown__item">
+                        <a href="#">Child 2</a>
+                    </div>
+                    <div class="drilldown__item">
+                        <div class="drilldown__parent">
+                            Child 3
+                        </div>
+                        <div class="drilldown__sub">
+                            <p class="drilldown__back">
+                                Back
+                            </p>
+                            <div class="drilldown__item">
+                                <a href="#">Child 3 1</a>
+                            </div>
+                            <div class="drilldown__item">
+                                <a href="#">Child 3 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="dist/drilldown.min.js"></script>
+<script>
+    const drilldown = new Drilldown(document.querySelector('.drilldown'), {
+      speed: 100
+    })
+</script>
+</body>
+</html>
